@@ -64,7 +64,7 @@ Here is a table listing some of the main Docker commands:
 | `docker rmi [OPTIONS] IMAGE [IMAGE...]`          | Remove one or more images                                 |
 | `docker exec [OPTIONS] CONTAINER COMMAND [ARGS]` | Run a command in a running container                      |
 | `docker logs [OPTIONS] CONTAINER`               | Fetch the logs of a container                             |
-| `docker inspect [OPTIONS] CONTAINER|IMAGE`      | Display detailed information about a container or image   |
+| `docker inspect [OPTIONS] CONTAINER IMAGE`      | Display detailed information about a container or image   |
 | `docker network ls`                             | List available networks                                   |
 | `docker volume ls`                              | List available volumes                                    |
 | `docker-compose [OPTIONS] [COMMAND] [ARGS]`     | Define and run multi-container Docker applications       |
@@ -116,4 +116,40 @@ This command lets anyone see the page on localhost:100
 docker run -d -p 100:80  ellieckay/nginx-test:latest
 ```
 
+## Automate docker
 
+Create a new folder for the docker.
+Add a index.html file with some basic html. This will show up on the browser. Add another file called Dockerfile and this is where you add the script:
+
+```
+# Write the script in here
+
+# Select base image
+FROM nginx
+
+# Label it
+LABEL MAINTAINER=elena@sparta
+
+# get index.html from localhost to default nginx index.html location
+COPY index.html /usr/share/nginx/html/
+
+# port mapping or exposing the required port
+EXPOSE 80
+
+# launch the new container
+CMD ["nginx", "-g", "daemon off;"]
+
+```
+
+In the command line in the correct folder run these commands:
+
+```
+docker build -t ellieckay/tech241-nginx:v1 . # Builds it
+
+docker run -d -p 97:80 ellieckay/tech241-nginx:v1 # Runs it
+
+docker commit 061f4ffcf4ba ellieckay/tech241-nginx:v1 # Commits it 
+
+docker push ellieckay/tech241-nginx:tagname # Pushes it to docker hub
+
+```
