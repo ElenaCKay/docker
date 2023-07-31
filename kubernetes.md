@@ -87,7 +87,7 @@ spec:
 
 #### YAML script for node app
 
-A blocker I had with this was the version. Its must be the same version that I run.
+A blocker I had with this was the version. Its must be the same version that I run. Filename: app-deploy.yml
 
 ```
 apiVersion: apps/v1
@@ -129,3 +129,33 @@ spec:
 | `kubectl get deployment`                         | Get a list of deployments in the Kubernetes cluster                                       |
 
 Please note that the `kubectl` commands assume you have the Kubernetes command-line tool (`kubectl`) installed and configured properly to work with your Kubernetes cluster.
+
+
+## Implement Self Healing
+
+If you delete a pod, another one will be created - Self healing.
+
+To do this you need to make a SVC in a service file. Filename: app-service.yml
+
+```
+---
+
+apiVersion: v1 # Relates to the version from deploy file
+kind: Service
+
+metadata:
+  name: app-svc
+  namespace: default # Used if multiple people are using the container
+
+spec:
+  ports:
+  - nodePort: 30002
+    port: 3000 # Relates to the containerPort in deploy file
+    targetPort: 3000
+
+  selector:
+    app: app # Relates to the label int he deploy file
+
+  type: NodePort
+
+```
