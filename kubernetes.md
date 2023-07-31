@@ -85,7 +85,7 @@ spec:
 # create a kubernetes nginx-service.yml to create a k8 service
 ```
 
-#### YAML script for node app
+#### YAML script to deploy node app
 
 A blocker I had with this was the version. Its must be the same version that I run. Filename: app-deploy.yml
 
@@ -158,4 +158,48 @@ spec:
 
   type: NodePort
 
+```
+
+## Run through comands for app deployment
+
+Use the files in the folder app-files. In the folder you will also need the app folder. For the app Dockerfile you need the environment variable which contains the mongodb ip address this can be found by doing `docker inspect <mongodb-img-id>`.
+
+Steps:
+
+1. Build the image
+2. run the image on the correct port (3000)
+3. deploy 3 instances using the deploy yaml file
+4. Check it has worked
+5. Create the SVC which will enable self healing
+6. Check SVC
+7. Check the pods
+
+```
+docker build -t ellieckay/tech241-app-new:v2 .
+docker run -d -p 3000:3000 ellieckay/tech241-app-new:v2
+kubectl create -f app-deploy.yml
+kubectl get deployment
+kubectl create -f app-service.yml
+kubectl get svc
+kubectl get pods
+
+```
+
+How to remove everything:
+
+Remove SVC = `kubectl delete svc <svc-name>`
+Remove deployment = `kubectl delete deployment <deployment name>`
+Remove img = ` docker rm -f <img id>`
+Delete image from the docker app when it is not in use.
+
+
+## Add MongoDB
+
+This should be run before the app. A config file must be created to replace the original mongodb one as the bind ip has to be changed to 0.0.0.0. This file must be in the same file or the path must be changed in the dockerfile.
+
+```
+docker build -t ellieckay/tech241-mongodb:v1 .
+docker run -d -p 27017:27017 ellieckay/tech241-mongodb:v1
+kubectl create -f mongodb-deploy.yml
+kubectl exec app-pod-name  env node seeds/seed.js # Seeds the data
 ```
