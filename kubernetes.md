@@ -203,3 +203,5 @@ docker run -d -p 27017:27017 ellieckay/tech241-mongodb:v1
 kubectl create -f mongodb-deploy.yml
 kubectl exec app-pod-name  env node seeds/seed.js # Seeds the data
 ```
+
+If everything is running correctly you can go to the browser and type in localhost:30002/posts and the posts page should work with data seeded.
