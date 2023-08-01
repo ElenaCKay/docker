@@ -205,3 +205,37 @@ kubectl exec app-pod-name  env node seeds/seed.js # Seeds the data
 ```
 
 If everything is running correctly you can go to the browser and type in localhost:30002/posts and the posts page should work with data seeded.
+
+## Add HPA Horizontal Pod Autoscaling
+
+![Alt text](imgs/asg.png)
+
+The HPA automatically updates a workload resource to scale to the demand. This means if there is an increase in demand, more pods will be created.
+To see the script go to mongodb-asg.yml or app-hpa.yml.
+
+Commands:
+
+```
+kubectl create -f mongodb-asg.yml
+kubectl get hpa
+```
+
+![Alt text](imgs/hpa-commands.png)
+
+## Add Volumes
+
+Persistant volumes (PV) exist beyond the lifetime of the pod thus preserving the data of that pod. It is a volume plugin.
+
+Persistent Volume Claim (PVC) is a request for storage by a user. It is like a Pod. Pods consume node resources and PVCs consume PV resources.
+
+These files can be seen in app-pv.yml and app-pvc.yml.
+
+Commands:
+
+```
+kubectl create -f app-pv.yml
+kubectl create -f app-pvc.yml
+kubectl get pv
+```
+
+![Alt text](imgs/get-pv.png)
