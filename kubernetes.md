@@ -78,7 +78,7 @@ spec:
     spec:
       containers:
       - name: nginx 
-        image: ahskhan/eng89automatednginx:latest # use the image that you built
+        image: ellieckay/nginx-img:latest # use the image that you built
         ports:
         - containerPort: 80
 
