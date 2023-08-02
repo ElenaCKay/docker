@@ -52,8 +52,9 @@ def data():
 
 
 ## Adding yaml file to deploy the app
-
 ```
+
+```yml
 
 # Deploy itjobswatch
 ---
